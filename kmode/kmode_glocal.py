@@ -11,6 +11,7 @@ class KModeGlobal:
     def __init__(
         self,
         csv_path,
+        K=3,
         cols_to_drop=None,
         feature_cols=None,
         max_iterations=10,
@@ -18,6 +19,8 @@ class KModeGlobal:
         n_partitions=10,
         verbose=True
     ) -> None:
+        
+        self.K = K
 
         self.pdf = pd.read_csv(csv_path)
 
@@ -61,7 +64,7 @@ class KModeGlobal:
     def init_centroid(self):
         for i, col in enumerate(self.df.columns):
             unique_values = self.unique_values_dict[col]
-            ramdom_vals = random.choices(unique_values, k=K)
+            ramdom_vals = random.choices(unique_values, k=self.K)
             if i == 0:
                 centroid = np.array(ramdom_vals).reshape(-1, 1).astype("str")
             else:
@@ -77,7 +80,7 @@ class KModeGlobal:
 
         for iter in range(self.max_iterations):
             clustered = self.rdd.map(
-                lambda x: KModeGlobal.get_closest_cluster(x, self.centroid.value)
+                lambda x: self.get_closest_cluster(x)
             )  # -> (k, v) = (cluster_i, X)
             group_by_clustered = clustered.reduceByKey(lambda x, y: np.vstack((x, y)))
             centroid_rdd = group_by_clustered.map(
@@ -99,7 +102,19 @@ class KModeGlobal:
 
             if distance <= self.stop_distance:
                 break
-
+    
+    def get_closest_cluster(self, x):
+        min_hamming_distance = np.inf
+        closest_cluster = 0
+        for i, mode in enumerate(self.centroid.value):
+            distance = KModeGlobal.hamming_distance(x, mode)
+            if distance < min_hamming_distance:
+                min_hamming_distance = distance
+                closest_cluster = i
+        return (closest_cluster, x)
+    
+    def predict(self, x):
+        return self.get_closest_cluster(x)[0]
 
     @staticmethod
     def to_numpy(row):
@@ -109,17 +124,6 @@ class KModeGlobal:
     @staticmethod
     def hamming_distance(x1, x2):
         return np.count_nonzero(x1 != x2)
-
-    @staticmethod
-    def get_closest_cluster(x, centroid):
-        min_hamming_distance = np.inf
-        closest_cluster = 0
-        for i, mode in enumerate(centroid):
-            distance = KModeGlobal.hamming_distance(x, mode)
-            if distance < min_hamming_distance:
-                min_hamming_distance = distance
-                closest_cluster = i
-        return (closest_cluster, x)
 
     @staticmethod
     def get_mode_from_vec(vec):
