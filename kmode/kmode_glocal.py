@@ -42,8 +42,8 @@ class KModeGlobal:
 
         self.df = self.spark.createDataFrame(self.pdf)
         self.df.cache()
-        rdd = self.df.rdd.repartition(n_partitions)
-        rdd.cache()
+        self.rdd = self.df.rdd.repartition(n_partitions)
+        self.rdd.cache()
 
         self.generate_unique_value_of_all_features()
 
