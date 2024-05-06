@@ -12,6 +12,11 @@ This project implements three clustering algorithms - KMeans, KMode, KPrototype,
 
 4. **DBSCAN**: DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a density-based clustering algorithm that groups together data points that are closely packed, while marking outliers as noise.
 
+## KMode
+### global approach
+![kmode global](assets\KMODE_global.drawio.png)
+### local approach
+![kmode local](assets\K-Mode-local.drawio.png)
 
 ## Getting Started
 
