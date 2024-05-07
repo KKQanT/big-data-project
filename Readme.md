@@ -14,9 +14,9 @@ This project implements three clustering algorithms - KMeans, KMode, KPrototype,
 
 ## KMode
 ### global approach
-![kmode global](assets\KMODE_global.drawio.png)
+![kmode global](assets/KMODE_global.drawio.png)
 ### local approach
-![kmode local](assets\K-Mode-local.drawio.png)
+![kmode local](assets/K-Mode-local.drawio.png)
 
 ## Getting Started
 
