@@ -4,8 +4,9 @@ from collections import Counter
 
 class KMode:
 
-    def __init__(self, K: int) -> None:
+    def __init__(self, K, centroid=None) -> None:
         self.K = K
+        self.centroid = centroid
 
     def init_centroid(self, X):
         col_len = X.shape[1]
@@ -35,11 +36,12 @@ class KMode:
         return closest_cluster
 
     def fit(self, X, n_iters=100, stopping_criterion=1) -> None:
-        self.init_centroid(X)
+        if self.centroid is None:
+          self.init_centroid(X)
         self.clustered = np.zeros(X.shape[0])
         for iter in range(n_iters):
             loss = self.fit_one_step(X)
-            print(f"iter: {iter} loss: {loss}")
+
             if loss < stopping_criterion:
                 break
 
@@ -60,7 +62,7 @@ class KMode:
         for i, x in enumerate(X_test):
             closest_centroid = self.get_closest_centroid(x)
             clustered[i] = closest_centroid
-        return clustered
+        return clustered.astype('int')
 
     @staticmethod
     def hamming_distance(a, b) -> int:
@@ -71,5 +73,9 @@ class KMode:
         def get_mode_from_vec(vec):
             counted = Counter(vec)
             return counted.most_common(1)[0][0]
-
-        return np.apply_along_axis(get_mode_from_vec, 0, arr)
+        P = arr.shape[1]
+        mode_arr = np.full((arr.shape[1], ), "", dtype="<U22")
+        for p in range(P):
+          mode = get_mode_from_vec(arr[:, p])
+          mode_arr[p] = mode
+        return mode_arr
