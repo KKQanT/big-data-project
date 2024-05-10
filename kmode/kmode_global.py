@@ -151,7 +151,7 @@ class KModeGlobal:
     @staticmethod
     def get_centroid(count_elem_hash):
         P = len(count_elem_hash)
-        centroid = np.full((P,), "")
+        centroid = np.full((P,), "", dtype="<U22")
         for idx, count_hash in count_elem_hash.items():
             mode = KModeGlobal.get_mode(count_hash)
             centroid[idx] = mode
