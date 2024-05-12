@@ -73,10 +73,9 @@ class KModeGlobal:
 
         for iter in range(self.max_iterations):
 
-            clustered_and_hash_count_rdd = self.rdd.map(
-                lambda x: self.get_closest_cluster_and_count(x)
-            )  # -> (k, v) = (cluster_i, count_hash)
-            counted_elem_rdd = clustered_and_hash_count_rdd.reduceByKey(
+            combined_counts_rdd = self.rdd.mapPartitions(self.merge_counts_within_partition)
+
+            counted_elem_rdd = combined_counts_rdd.reduceByKey(
                 lambda x, y: KModeGlobal.merge_count_elem_hash(x, y)
             )
             cluster_and_new_centroid_rdd = counted_elem_rdd.map(
@@ -166,3 +165,13 @@ class KModeGlobal:
                 mode = value
                 highest_count = count
         return mode
+
+    def merge_counts_within_partition(self, iterator):
+        combined_counts = {}
+        for x in iterator:
+            cluster, count_hash = self.get_closest_cluster_and_count(x)
+            if cluster in combined_counts:
+                combined_counts[cluster] = self.merge_count_elem_hash(combined_counts[cluster], count_hash)
+            else:
+                combined_counts[cluster] = count_hash
+        yield from combined_counts.items()
