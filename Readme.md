@@ -12,6 +12,22 @@ This project implements three clustering algorithms - KMeans, KMode, KPrototype,
 
 4. **DBSCAN**: DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a density-based clustering algorithm that groups together data points that are closely packed, while marking outliers as noise.
 
+
+## Kmeans
+
+### File Description
+
+#### notebook
+The provided code is an implementation of the K-means clustering algorithm using Apache Spark and NumPy. It consists of two main classes: KMeans and a helper class for data conversion.
+- The KMeans class contains methods for initializing centroids, finding the closest centroid for a given data point, fitting the K-means model to the data, and transforming new      data points based on the learned centroids.
+- The helper class partition_to_numpy_array is used to convert Apache Spark's RDD partition data into NumPy arrays, which are required for the K-means algorithm implementation.
+- Additionally, there are two helper functions: get_optimal_kmeans_centroid and get_optimal_kmeans_centroid_with_dummy_key. These functions are used to obtain the optimal            centroids for each partition and to handle the key-value pair format required by Apache Spark's reduceByKey operation.
+
+The notebook includes a section that iterates over different fractions of the input data and different numbers of partitions, performing the parallel K-means clustering and reporting the results.
+It's important to note that for small datasets, the overhead of distributed computing may outweigh the benefits of parallelization. However, this implementation can serve as a foundation for handling larger datasets more efficiently in the future.
+Note: Please install pyspark and ucimlrepo to run this code.
+
+
 ## KMode
 ### global approach
 ![kmode global](assets/KMODE_global.drawio.png)
@@ -110,6 +126,57 @@ Table: Comparison of the final centroids obtained from clustering Kaggle categor
 ![mushroom dataset size up](assets/kmode_mushroom_sizeup.png)
 
 ![kaggle categorical encoding competition II dataset size up](assets/kmode_kaggle_sizeup.png)
+
+## K-Prototype Global
+
+This is an implementation of the K-Prototype clustering algorithm in PySpark. The K-Prototype algorithm is an extension of the K-Means and K-Mode algorithm that can handle both numerical and categorical data.
+
+### Usage
+
+1. Load your data into a Pandas DataFrame and pass it to the `df` variable. 
+2. Define the labels for your data in the `labels` list. order: numerical labels first, followed by categorical labels.
+3. Specify the index where the categorical labels start in the `categorical_labels_start_index` variable.
+4. Run the code.
+
+### Modifying Categorical Variable Importance
+
+The relative importance given to categorical variables is controlled by the coefficient `0.2` next to the `hamming_distance` function. Increasing this value will give more importance to categorical variables during clustering.
+
+### Using Other Distance Metrics
+
+You can use other distance metrics for numerical and categorical data by modifying the `euclidean_distance` and `hamming_distance` functions, respectively. The new distance functions should follow the same format as the existing ones, returning a numpy array of distances between the input vector and the centroids.
+
+### Dependencies
+
+- PySpark
+- Pandas
+- NumPy
+
+## DBSCAN Implementation
+
+This is an implementation of the DBSCAN algorithm using Apache Spark. It is tailored to handle geospatial data, which is partitioned and processed by DBSCAN clustering on each partition. The implementation also includes a strategy to merge these local clusters into global clusters efficiently.
+
+### Dataset
+
+The geospatial data used in this project can be found at the following link:
+
+[Geospatial Data on Kaggle](https://www.kaggle.com/datasets/jeniannamathew/geodata)
+
+### Running the Implementation
+
+To see the implementation in action, you can run the Kaggle notebook where the data is pre-loaded.
+
+[DBSCAN Implementation on Kaggle](https://www.kaggle.com/code/jeniannamathew/dbscan)
+
+Alternatively, you can download the dataset from the provided link, set the correct path to the root directory of the data, and run the code in your local environment.
+
+### Dependencies
+
+To run this project, you will need the following Python packages installed:
+
+- PySpark
+- Pandas
+- NumPy
 
 ## Getting Started
 
