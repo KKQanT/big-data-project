@@ -6,13 +6,13 @@ This project implements three clustering algorithms - KMeans, KMode, KPrototype,
 
 ## Clustering Algorithms Implemented
 
-1. **KMeans**: KMeans is a popular clustering algorithm that partitions data into 'k' clusters based on similarity of features.
+1. [**KMeans**](https://projects.cs.nott.ac.uk/ppxpj2/big-data-project/-/tree/main/kmeans?): KMeans is a popular clustering algorithm that partitions data into 'k' clusters based on similarity of features.
 
 2. [**KMode**](https://projects.cs.nott.ac.uk/ppxpj2/big-data-project/-/tree/main/kmode?ref_type=heads): KMode is a clustering algorithm specifically designed for categorical data, where clusters are formed based on the mode of categories. Both local and global implementations are provided in this directory, along with an experimental notebook demonstrating how the size-up and num partition affect runtime. There are also notebooks that includes a step-by-step explanation of implementation.
 
-3. **KPrototype**: KPrototype extends KMeans to handle both numerical and categorical data, allowing for more versatile clustering in mixed data types.
+3. [**KPrototype**](https://projects.cs.nott.ac.uk/ppxpj2/big-data-project/-/tree/main/kprop?ref_type=heads): KPrototype extends KMeans to handle both numerical and categorical data, allowing for more versatile clustering in mixed data types.
 
-4. **DBSCAN**: DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a density-based clustering algorithm that groups together data points that are closely packed, while marking outliers as noise.
+4. [**DBSCAN**](https://projects.cs.nott.ac.uk/ppxpj2/big-data-project/-/tree/main/dbscan?ref_type=heads): DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a density-based clustering algorithm that groups together data points that are closely packed, while marking outliers as noise.
 
 
 ## Kmeans
